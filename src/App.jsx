@@ -9,37 +9,45 @@ import Header from "./components/Header";
 import { FiLoader } from "react-icons/fi";
 import toast, { Toaster } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
+import AppLoadingScreen from "./components/AppLoadingScreen";
 
 function App() {
   const [todos, setTodos] = useState([]);
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem("darkMode") === "true");
   const [user, loading] = useAuthState(auth);
   const [appLoading, setAppLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Glass morphism effect colors
   const glassBg = darkMode ? 'rgba(15, 23, 42, 0.8)' : 'rgba(255, 255, 255, 0.8)';
   const glassBorder = darkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
   const glassShadow = darkMode ? '0 8px 32px rgba(0, 0, 0, 0.3)' : '0 8px 32px rgba(0, 0, 0, 0.1)';
 
+
+  useEffect(() => {
+    // Simulate loading
+    const timer = setTimeout(() => setIsLoading(false), 3000);
+    return () => clearTimeout(timer);
+  }, []);
   // Fetch todos
   useEffect(() => {
     if (user) {
       const q = query(collection(db, "todos"), where("userId", "==", user.uid));
       const unsubscribe = onSnapshot(q, (snapshot) => {
-        const todosData = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+        const todosData = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         todosData.sort((a, b) => b.createdAt?.seconds - a.createdAt?.seconds);
         setTodos(todosData);
         setAppLoading(false);
+        setIsLoading(false); // stop loading when data is ready
       });
       return () => unsubscribe();
     } else {
       setTodos([]);
       setAppLoading(false);
+      setIsLoading(false);
     }
   }, [user]);
+
 
   // Add new todo
   const addTodo = async (text) => {
@@ -101,25 +109,10 @@ function App() {
   };
 
   // Loading screen
-  if (loading || appLoading) {
-    return (
-      <div className={`min-h-screen flex items-center justify-center ${darkMode ? "bg-gray-900" : "bg-gray-50"}`}>
-        <motion.div
-          animate={{ 
-            rotate: 360,
-            scale: [1, 1.2, 1]
-          }}
-          transition={{ 
-            repeat: Infinity,
-            duration: 1.5,
-            ease: "linear"
-          }}
-        >
-          <FiLoader className="text-5xl text-indigo-500" />
-        </motion.div>
-      </div>
-    );
+  if (isLoading || appLoading) {
+    return <AppLoadingScreen darkMode={darkMode} />;
   }
+
 
   return (
     <div className={`min-h-screen transition-colors duration-500 ${darkMode ? "bg-gray-900" : "bg-gradient-to-br from-indigo-50 to-purple-50"}`}>
@@ -151,7 +144,7 @@ function App() {
         ))}
       </div>
 
-      <Toaster 
+      <Toaster
         position="top-center"
         toastOptions={{
           style: {
@@ -163,7 +156,7 @@ function App() {
           },
         }}
       />
-      
+
       <div className="container mx-auto px-4 py-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -171,7 +164,7 @@ function App() {
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="max-w-md mx-auto"
         >
-          <div 
+          <div
             className="rounded-3xl overflow-hidden backdrop-blur-lg"
             style={{
               background: glassBg,
@@ -180,7 +173,7 @@ function App() {
             }}
           >
             <Header user={user} darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-            
+
             <AnimatePresence mode="wait">
               {user ? (
                 <motion.div
@@ -191,10 +184,10 @@ function App() {
                   className="p-6"
                 >
                   <TodoForm onAdd={addTodo} darkMode={darkMode} />
-                  <TodoList 
-                    todos={todos} 
-                    onComplete={completeTodo} 
-                    onDelete={deleteTodo} 
+                  <TodoList
+                    todos={todos}
+                    onComplete={completeTodo}
+                    onDelete={deleteTodo}
                     darkMode={darkMode}
                   />
                 </motion.div>
@@ -221,15 +214,15 @@ function App() {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={handleGoogleSignIn}
-                      className="relative overflow-hidden group flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3 rounded-full transition-all duration-300 mx-auto shadow-lg hover:shadow-xl"
+                      className="relative overflow-hidden group flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl transition-all duration-300 mx-auto shadow-lg hover:shadow-xl"
                     >
-                      <motion.span 
+                      <motion.span
                         className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"
                         style={{ borderRadius: '9999px' }}
                       />
                       <img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5" />
                       <span className="font-medium">Sign In with Google</span>
-                      <motion.span 
+                      <motion.span
                         className="absolute right-4 opacity-0 group-hover:opacity-100 group-hover:right-6 transition-all duration-300"
                         initial={{ x: -10 }}
                       >
