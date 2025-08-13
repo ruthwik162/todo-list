@@ -23,12 +23,12 @@ function App() {
   const glassBorder = darkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
   const glassShadow = darkMode ? '0 8px 32px rgba(0, 0, 0, 0.3)' : '0 8px 32px rgba(0, 0, 0, 0.1)';
 
-
   useEffect(() => {
     // Simulate loading
     const timer = setTimeout(() => setIsLoading(false), 3000);
     return () => clearTimeout(timer);
   }, []);
+
   // Fetch todos
   useEffect(() => {
     if (user) {
@@ -47,7 +47,6 @@ function App() {
       setIsLoading(false);
     }
   }, [user]);
-
 
   // Add new todo
   const addTodo = async (text) => {
@@ -113,18 +112,17 @@ function App() {
     return <AppLoadingScreen darkMode={darkMode} />;
   }
 
-
   return (
     <div className={`min-h-screen transition-colors duration-500 ${darkMode ? "bg-gray-900" : "bg-gradient-to-br from-indigo-50 to-purple-50"}`}>
-      {/* Animated floating shapes background */}
+      {/* Animated floating shapes background - reduced number on mobile */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {[...Array(15)].map((_, i) => (
+        {[...Array(window.innerWidth < 768 ? 8 : 15)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute rounded-full opacity-10"
             style={{
-              width: Math.random() * 200 + 50,
-              height: Math.random() * 200 + 50,
+              width: Math.random() * (window.innerWidth < 768 ? 100 : 200) + 50,
+              height: Math.random() * (window.innerWidth < 768 ? 100 : 200) + 50,
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
               background: darkMode ? 'rgba(99, 102, 241, 0.3)' : 'rgba(99, 102, 241, 0.2)',
@@ -145,7 +143,7 @@ function App() {
       </div>
 
       <Toaster
-        position="top-center"
+        position={window.innerWidth < 768 ? "top-right" : "top-center"}
         toastOptions={{
           style: {
             background: darkMode ? '#1e293b' : '#ffffff',
@@ -153,6 +151,8 @@ function App() {
             backdropFilter: 'blur(10px)',
             border: darkMode ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+            fontSize: window.innerWidth < 768 ? '14px' : '16px',
+            maxWidth: window.innerWidth < 768 ? '80vw' : '100%',
           },
         }}
       />
@@ -162,7 +162,7 @@ function App() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="max-w-md mx-auto"
+          className="max-w-md mx-auto w-full px-2 sm:px-0" // Added responsive padding
         >
           <div
             className="rounded-3xl overflow-hidden backdrop-blur-lg"
@@ -181,7 +181,7 @@ function App() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="p-6"
+                  className="p-4 sm:p-6" // Responsive padding
                 >
                   <TodoForm onAdd={addTodo} darkMode={darkMode} />
                   <TodoList
@@ -197,33 +197,33 @@ function App() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.3 }}
-                  className="text-center p-12"
+                  className="text-center p-6 sm:p-12" // Responsive padding
                 >
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
                   >
-                    <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">
+                    <h2 className="text-xl sm:text-2xl font-bold mb-2 bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">
                       TaskMaster Pro
                     </h2>
-                    <p className="text-gray-500 dark:text-gray-400 mb-6">
+                    <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mb-4 sm:mb-6">
                       Organize your life with style
                     </p>
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={handleGoogleSignIn}
-                      className="relative overflow-hidden group flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl transition-all duration-300 mx-auto shadow-lg hover:shadow-xl"
+                      className="relative overflow-hidden group flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl transition-all duration-300 mx-auto shadow-lg hover:shadow-xl text-sm sm:text-base"
                     >
                       <motion.span
                         className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"
                         style={{ borderRadius: '9999px' }}
                       />
-                      <img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5" />
+                      <img src="https://www.google.com/favicon.ico" alt="Google" className="w-4 sm:w-5 h-4 sm:h-5" />
                       <span className="font-medium">Sign In with Google</span>
                       <motion.span
-                        className="absolute right-4 opacity-0 group-hover:opacity-100 group-hover:right-6 transition-all duration-300"
+                        className="absolute right-2 sm:right-4 opacity-0 group-hover:opacity-100 group-hover:right-3 sm:group-hover:right-6 transition-all duration-300"
                         initial={{ x: -10 }}
                       >
                         →

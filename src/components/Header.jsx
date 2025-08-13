@@ -62,7 +62,7 @@ const Header = ({ darkMode, toggleDarkMode, user }) => {
   const userInitials = getInitials(userName);
 
   return (
-    <div className="flex items-center justify-between p-6">
+    <div className="flex items-center justify-between p-4 sm:p-6">
       <motion.div 
         initial={{ x: -20, opacity: 0 }}
         animate={controls}
@@ -72,10 +72,10 @@ const Header = ({ darkMode, toggleDarkMode, user }) => {
           whileHover={{ rotate: 15 }}
           transition={{ type: "spring", stiffness: 300 }}
         >
-          <FiList className="text-indigo-500 text-3xl mr-3" />
+          <FiList className="text-indigo-500 text-2xl sm:text-3xl mr-2 sm:mr-3" />
         </motion.div>
         <motion.h1 
-          className="text-3xl font-bold bg-clip-text text-transparent"
+          className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent"
           style={{
             backgroundImage: 'linear-gradient(90deg, #6366f1, #8b5cf6, #d946ef, #6366f1)',
             backgroundSize: '300% 100%'
@@ -89,20 +89,20 @@ const Header = ({ darkMode, toggleDarkMode, user }) => {
       <motion.div 
         initial={{ x: 20, opacity: 0 }}
         animate={controls}
-        className="flex items-center space-x-4"
+        className="flex items-center space-x-2 sm:space-x-4"
       >
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={toggleDarkMode}
-          className="p-2 rounded-full backdrop-blur-md bg-white/10 dark:bg-black/10 hover:bg-white/20 dark:hover:bg-black/20 border border-white/20 dark:border-black/20 shadow-lg hover:shadow-xl transition-all"
+          className="p-1 sm:p-2 rounded-full backdrop-blur-md bg-white/10 dark:bg-black/10 hover:bg-white/20 dark:hover:bg-black/20 border border-white/20 dark:border-black/20 shadow-lg hover:shadow-xl transition-all"
           aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
         >
           {darkMode ? (
             <motion.div
               transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
             >
-              <FiSun className="text-yellow-400 text-xl" />
+              <FiSun className="text-yellow-400 text-lg sm:text-xl" />
             </motion.div>
           ) : (
             <motion.div
@@ -114,7 +114,7 @@ const Header = ({ darkMode, toggleDarkMode, user }) => {
                 ease: "easeInOut"
               }}
             >
-              <FiMoon className="text-indigo-300 text-xl" />
+              <FiMoon className="text-indigo-300 text-lg sm:text-xl" />
             </motion.div>
           )}
         </motion.button>
@@ -123,20 +123,19 @@ const Header = ({ darkMode, toggleDarkMode, user }) => {
           <motion.div 
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            className="flex items-center space-x-3"
+            className="flex items-center space-x-2 sm:space-x-3"
           >
             {userPhoto ? (
               <motion.div 
                 whileHover={{ scale: 1.1 }}
                 className="relative"
               >
-                <FiUser className='w-10 h-10'  />
-
+                <FiUser className='w-8 h-8 sm:w-10 sm:h-10' />
               </motion.div>
             ) : (
               <motion.div
                 whileHover={{ scale: 1.1 }}
-                className="w-9 h-9 rounded-full flex items-center justify-center text-white font-medium relative overflow-hidden"
+                className="w-7 h-7 sm:w-9 sm:h-9 rounded-full flex items-center justify-center text-white font-medium relative overflow-hidden"
               >
                 <motion.div
                   className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 opacity-80"
@@ -149,17 +148,17 @@ const Header = ({ darkMode, toggleDarkMode, user }) => {
                     ease: "linear"
                   }}
                 />
-                <span className="relative z-10">{userInitials}</span>
+                <span className="relative z-10 text-sm sm:text-base">{userInitials}</span>
               </motion.div>
             )}
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={handleSignOut}
-              className="p-2 rounded-full backdrop-blur-md bg-white/10 dark:bg-black/10 hover:bg-white/20 dark:hover:bg-black/20 border border-white/20 dark:border-black/20 shadow-lg hover:shadow-xl transition-all"
+              className="p-1 sm:p-2 rounded-full backdrop-blur-md bg-white/10 dark:bg-black/10 hover:bg-white/20 dark:hover:bg-black/20 border border-white/20 dark:border-black/20 shadow-lg hover:shadow-xl transition-all"
               aria-label="Sign out"
             >
-              <FiLogOut className="text-red-400 text-xl" />
+              <FiLogOut className="text-red-400 text-lg sm:text-xl" />
             </motion.button>
           </motion.div>
         )}
