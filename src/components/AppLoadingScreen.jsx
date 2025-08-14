@@ -154,7 +154,7 @@ const AppLoadingScreen = ({ darkMode, onLoadingComplete }) => {
         }}
         className="mt-6 text-indigo-500"
       >
-        <FiLoader className="text-xl" />
+        <FiLoader className="text-xl rounded-full" />
       </motion.div>
     </motion.div>
   );

@@ -42,7 +42,7 @@ const TodoItem = ({ todo, onComplete, onDelete, darkMode }) => {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0, transition: { type: "spring", stiffness: 500, damping: 30 } }}
       exit={{ opacity: 0, x: -100, transition: { duration: 0.3 } }}
-      className={`group flex items-center justify-between p-4 my-3 rounded-2xl
+      className={`group flex items-center justify-between p-4 my-3 rounded-xl
         ${todo.completed 
           ? 'bg-green-100 dark:bg-green-800' 
           : darkMode 
@@ -81,7 +81,7 @@ const TodoItem = ({ todo, onComplete, onDelete, darkMode }) => {
                 exit={{ scale: 0.8 }}
                 className="flex items-center"
               >
-                <FiCircle className={`text-indigo-600 dark:text-indigo-400 text-sm opacity-100`} />
+                <FiCircle className={`text-indigo-600 dark:text-indigo-400 text-sm opacity-100 md:opacity-0 cursor-pointer md:hover:opacity-100`} />
                 <span className="ml-1 text-xs sr-only">Pending</span>
               </motion.div>
             )}
